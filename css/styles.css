@@ -1,0 +1,22 @@
+body{
+  background-color: darkcyan;
+}
+
+.typewriter {
+  font-family: monospace;
+  overflow: hidden;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: black;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
