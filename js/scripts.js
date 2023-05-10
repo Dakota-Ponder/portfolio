@@ -1,25 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Typing effect
-  var text = "Hi, I'm Dakota";
-  var i = 0;
-  var speed = 100;
-  var typewriter = document.getElementById('typewriter');
-
-  var cursor = document.createElement('span');
-  cursor.className = 'cursor';
-  typewriter.appendChild(cursor);
-
-  function typeWriter() {
-    if (i < text.length) {
-      var charSpan = document.createElement('span');
-      charSpan.textContent = text.charAt(i);
-      typewriter.insertBefore(charSpan, cursor);
-      i++;
-      setTimeout(typeWriter, speed);
-    }
-  }
-
-  typeWriter();
+  
   // Fractal tree
   function drawFractalTree(ctx, startX, startY, length, angle, depth) {
     if (depth === 0) return;
