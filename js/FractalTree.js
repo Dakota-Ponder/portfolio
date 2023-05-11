@@ -1,43 +1,70 @@
-import React from "react";
-import { ReactP5Wrapper } from "react-p5-wrapper";
-import "../styles/FractalTree.css";
+document.addEventListener('DOMContentLoaded', function() {
+  window.onload = function() {
+  var canvas = document.getElementById('fractal-tree');
+  var context = canvas.getContext('2d');
+  var angle = Math.PI / 4;
 
-let angle;
+  function draw() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.translate(200, canvas.height);
+    branch(context, 100);
+    context.restore();
+  }
 
-const Sketch = p5 => {
-  p5.setup = () => {
-    p5.createCanvas(400, 400, "transparent");
-    angle = p5.PI / 4;
-    p5.stroke(255);
-  };
+  function branch(context, len) {
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(0, -len);
+    context.stroke();
 
-  p5.draw = () => {
-    p5.clear();
-    p5.translate(200, p5.height);
-    angle = p5.map(p5.sin(p5.frameCount * 0.01), -1, 1, p5.PI / 2, p5.PI / 16); // vary the angle using sin()
-    branch(100);
-  };
-
-  function branch(len) {
-    p5.line(0, 0, 0, -len);
-    p5.translate(0, -len);
     if (len > 4) {
-      p5.push();
-      p5.rotate(angle);
-      branch(len * 0.67);
-      p5.pop();
-      p5.push();
-      p5.rotate(-angle);
-      branch(len * 0.67);
-      p5.pop();
+      context.save();
+      context.translate(0, -len);
+
+      context.save();
+      context.rotate(angle);
+      branch(context, len * 0.67);
+      context.restore();
+
+      context.save();
+      context.rotate(-angle);
+      branch(context, len * 0.67);
+      context.restore();
+
+      context.restore();
     }
   }
+
+  setInterval(function() {
+    angle = angle + 0.01;
+    draw();
+  }, 100);
 };
+  // Fractal tree
+  function drawFractalTree(ctx, startX, startY, length, angle, depth) {
+    if (depth === 0) return;
 
-const FractalTree = () => (
-  <div id="fractal-tree">
-    <ReactP5Wrapper sketch={Sketch} />
-  </div>
-);
+    var endX = startX + length * Math.cos(angle);
+    var endY = startY + length * Math.sin(angle);
 
-export default FractalTree;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+
+    var newLength = length * 0.7;
+    var newDepth = depth - 1;
+
+    drawFractalTree(ctx, endX, endY, newLength, angle + Math.PI / 6, newDepth);
+    drawFractalTree(ctx, endX, endY, newLength, angle - Math.PI / 6, newDepth);
+  }
+
+  var canvas = document.getElementById('fractal-tree');
+  var ctx = canvas.getContext('2d');
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'white'; // Change the color here
+
+  drawFractalTree(ctx, 200, 350, 100, -Math.PI / 2, 10);
+});
